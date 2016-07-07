@@ -72,14 +72,19 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
     ordered = sorted(counter.iteritems(), key=lambda d:d[sortindex], reverse=not asc)
 
     # console output
+    total_file_count = 0
     for tuple in ordered:
         prefix = tuple[0]
         files = mapper[prefix]
 
         print("%s  (%d)" %(prefix, len(files)))
 
+        total_file_count += len(files)
+
         for file in files:
             print("    " + file)
+
+    print("--- Total %d files ---"% total_file_count)
 
     # file output
     if output is not None:
@@ -100,6 +105,7 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
                 for file in files:
                     line = file.encode('utf-8')
                     f.write("    " + line + "\n")
+            f.write("--- Total %d files ---"% total_file_count)
 
 
 def _get_param(value, default):
