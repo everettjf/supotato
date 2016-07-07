@@ -44,9 +44,6 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
     if input is None:
         input = getcwd()
 
-    if output is None:
-        output = getcwd()
-
     sortindex = 0
     if sortby == "count":
         sortindex = 1
@@ -74,6 +71,7 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
 
     ordered = sorted(counter.iteritems(), key=lambda d:d[sortindex], reverse=not asc)
 
+    # console output
     for tuple in ordered:
         prefix = tuple[0]
         files = mapper[prefix]
@@ -82,6 +80,25 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
 
         for file in files:
             print("    " + file)
+
+    # file output
+    if output is not None:
+        if os.path.isdir(output):
+            output = os.path.join(output, "result.txt")
+
+        if os.path.isfile(output):
+            print('!!!! output file already exist : %s !!!!' % output)
+            return
+
+        with open(output,mode='a+') as f:
+            for tuple in ordered:
+                prefix = tuple[0]
+                files = mapper[prefix]
+
+                f.write("%s  (%d)\n" %(prefix, len(files)))
+
+                for file in files:
+                    f.write("    " + file.encode('utf-8') + "\n")
 
 
 def _get_param(value, default):
@@ -95,10 +112,10 @@ def main():
     parser = argparse.ArgumentParser(description=description)
 
     parser.add_argument("-i", "--input", type=str, help="directory that header(.h) files in. ")
-    parser.add_argument("-o", "--output", type=str, help="directory to put txt report in.")
+    parser.add_argument("-o", "--output", type=str, help="file (or directory) path to put txt report in.")
     parser.add_argument("-s", "--sortby", type=str, help="prefix or count . Means sort by prefix or count.")
     parser.add_argument("-d", "--order", type=str, help="desc or asc.")
-    parser.add_argument("-l", "--prefixlength", type=int, help="prefix length for classify , default to 2.")
+    parser.add_argument("-p", "--prefixlength", type=int, help="prefix length for classify , default to 2.")
 
     args = parser.parse_args()
 
