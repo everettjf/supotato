@@ -6,9 +6,8 @@ Classify (.h) header files into a text (.txt) report according to the first 2 le
 $ pip install supotato
 ```
 #### Compatibility
-* Python 2.7 / Python 3.x
-* Linux / OSX / Windows
 
+Tested 2.7.10/3.5.0 on macOS
 
 ## Usage
 
@@ -32,6 +31,9 @@ $ supotato -i headers -o .
 Then you got result below :
 
 [Here](https://github.com/everettjf/supotato/blob/master/example/result.txt)
+
+
+PS: Another result sample [Here](https://github.com/everettjf/supotato/blob/master/example/lots.txt).
 
 
 ##Options

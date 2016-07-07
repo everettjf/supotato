@@ -69,7 +69,11 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
         files = mapper[prefix]
         counter[prefix] = len(files)
 
-    ordered = sorted(counter.iteritems(), key=lambda d:d[sortindex], reverse=not asc)
+    if six.PY2:
+        ordered = sorted(counter.iteritems(), key=lambda d:d[sortindex], reverse=not asc)
+    else:
+        ordered = sorted(counter.items(), key=lambda d:d[sortindex], reverse=not asc)
+
 
     # console output
     total_file_count = 0
@@ -103,7 +107,10 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
                 f.write("%s  (%d)\n" %(prefix, len(files)))
 
                 for file in files:
-                    line = file.encode('utf-8')
+                    if six.PY2:
+                        line = file.encode('utf-8')
+                    else:
+                        line = file
                     f.write("    " + line + "\n")
             f.write("--- Total %d files ---"% total_file_count)
 
@@ -137,5 +144,5 @@ def main():
     sys.exit()
 
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
