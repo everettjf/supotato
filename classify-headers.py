@@ -98,7 +98,8 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
                 f.write("%s  (%d)\n" %(prefix, len(files)))
 
                 for file in files:
-                    f.write("    " + file.encode('utf-8') + "\n")
+                    line = file.encode('utf-8')
+                    f.write("    " + line + "\n")
 
 
 def _get_param(value, default):
