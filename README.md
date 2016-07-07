@@ -11,8 +11,7 @@ $ pip install supotato
 
 
 ## Usage
-* Go to directory, where (.h) header files in.
-* Run the following command in your terminal.
+
 ```sh
 $ supotato -i headers -o .
 ```
@@ -20,7 +19,19 @@ $ supotato -i headers -o .
 
 ## Example
 
+When you got lots of headers like this : 
 
+[Here](https://github.com/everettjf/supotato/tree/master/example/headers)
+
+After run (suppose you go into example directory currently):
+
+```sh
+$ supotato -i headers -o .
+```
+
+Then you got result below :
+
+[Here](https://github.com/everettjf/supotato/blob/master/example/result.txt)
 
 
 ##Options
@@ -47,6 +58,9 @@ optional arguments:
 
 ```
 
+```
+$ supotato -i /Users/xxx/wechat/headers/ -o /Users/xxx/wechat/ -s prefix -order desc -p 3
+```
 
 
 
