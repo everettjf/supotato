@@ -49,7 +49,7 @@ def download_git(podname, git, tag=None, commit=None):
 
     cmd.add('cd ' + path)
     if tag is not None:
-        cmd.add('git checkout tags/' + tag)
+        cmd.add('git checkout tags/' + str(tag))
     elif commit is not None:
         cmd.add('git checkout ' + commit)
 
@@ -201,12 +201,17 @@ def parse_podspec(podname,podspec_filepath):
 
 
 def fetch_latest_version(podpath):
-    versions = os.listdir(podpath)
-    if len(versions) == 0:
-        return None
+    try:
+        versions = os.listdir(podpath)
+        if len(versions) == 0:
+            return None
 
-    loose_versions = [LooseVersion(ver) for ver in versions]
-    return str(max(loose_versions))
+        print(versions)
+        loose_versions = [LooseVersion(str(ver)) for ver in versions]
+        return str(max(loose_versions))
+    except:
+        pass
+    return None
 
 
 def build_pod(podname, podpath):
@@ -227,8 +232,11 @@ def build(spec_base):
 
     cnt = 0
     for podname in pods:
+        podname = podname.replace('(', '')
+        podname = podname.replace(')', '')
+
         cnt += 1
-        if cnt > 10:
+        if cnt > 1000:
             break
 
         # filter some podname
