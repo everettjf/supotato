@@ -9,6 +9,31 @@ import re
 
 download_cache_directory = '/Users/everettjf/cache_supotato'
 
+
+def clear_cache_directory():
+    for root, dirs, files in os.walk(download_cache_directory):
+        for d in dirs:
+            if d == '.git':
+                dirpath = os.path.join(root,d)
+                # print('rm dir ' + dirpath)
+                try:
+                    os.rmdir(dirpath)
+                except:
+                    pass
+
+        for f in files:
+            if f.endswith('.h') or f.endswith('.m'):
+                continue
+
+            filepath = os.path.join(root, f)
+            #remove
+            try:
+                # print('remove ' + filepath)
+                os.remove(filepath)
+            except:
+                pass
+
+
 class Command:
     def __init__(self):
         self.cmds = []
@@ -239,6 +264,9 @@ def build(spec_base):
         cnt += 1
         if cnt > 10000:
             break
+
+        if cnt % 100 == 0:
+            clear_cache_directory()
 
         # filter some podname
         if len(podname) <= 2:
