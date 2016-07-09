@@ -8,7 +8,8 @@ import json
 download_cache_directory = '/Users/everettjf/cache_supotato'
 
 class Command:
-    cmds = []
+    def __init__(self):
+        self.cmds = []
 
     def add(self, cmd):
         self.cmds.append(cmd)
@@ -34,13 +35,12 @@ def download_git(podname, git, tag=None, commit=None):
     """
     path = os.path.join(download_cache_directory, podname)
 
+    if os.path.exists(path):
+        return
+
     cmd = Command()
     cmd.add('cd ' + download_cache_directory)
-
-    if os.path.exists(path):
-        print('directory alread exist : ' + path)
-    else:
-        cmd.add('git clone ' + git + ' ' + podname)
+    cmd.add('git clone ' + git + ' ' + podname)
 
     cmd.add('cd ' + path)
     if tag is not None:
@@ -97,22 +97,57 @@ def download_source(podname, source):
     return source_dir
 
 
+def check_files(podname, source_dir, podspec , sub=False):
+    source_files = None
+    if 'source_files' in podspec:
+        source_files = podspec['source_files']
+
+    public_header_files = None
+    if 'public_header_files' in podspec:
+        public_header_files = podspec['public_header_files']
+
+    if source_files is None and public_header_files is None:
+        print(podspec)
+        return
+
+    if source_files is not None:
+        print(source_files)
+
+    if public_header_files is not None:
+        print(public_header_files)
+
+
+
+
+
 def parse_podspec(podname,podspec_filepath):
+    """
+    clone the repo
+
+    get header file names (*.h)
+
+
+    :param podname:
+    :param podspec_filepath:
+    :return:
+    """
     with open(podspec_filepath) as json_file:
         podspec = json.load(json_file)
 
         source = podspec['source']
         if source is None:
             return
-
+        # download the source
         source_dir = download_source(podname, source)
         if source_dir is None:
             return
-
         print(source_dir)
 
+        check_files(podname, source_dir, podspec)
 
-
+        if 'subspecs' in podspec:
+            for subspec in podspec['subspecs']:
+                check_files(podname, source_dir, subspec, sub=True)
 
 
 def fetch_latest_version(podpath):
