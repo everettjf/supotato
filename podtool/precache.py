@@ -3,6 +3,7 @@
 import os
 from distutils.version import LooseVersion
 import json
+import glob
 
 
 download_cache_directory = '/Users/everettjf/cache_supotato'
@@ -36,7 +37,7 @@ def download_git(podname, git, tag=None, commit=None):
     path = os.path.join(download_cache_directory, podname)
 
     if os.path.exists(path):
-        return
+        return path
 
     cmd = Command()
     cmd.add('cd ' + download_cache_directory)
@@ -107,14 +108,31 @@ def check_files(podname, source_dir, podspec , sub=False):
         public_header_files = podspec['public_header_files']
 
     if source_files is None and public_header_files is None:
-        print(podspec)
+        # print(podspec)
         return
 
     if source_files is not None:
+        print('-----------')
+        print(source_dir)
         print(source_files)
+        print(type(source_files))
+        print(': after glob =')
+
+        if isinstance(source_files, list):
+            for source_file in source_files:
+                files = glob.glob(os.path.join(source_dir, source_file))
+                print(files)
+        elif isinstance(source_files, str):
+            source_file = source_files
+            files = glob.glob(os.path.join(source_dir, source_file))
+            print(files)
+        else:
+            print(source_files)
+            pass
 
     if public_header_files is not None:
-        print(public_header_files)
+        # print(public_header_files)
+        pass
 
 
 
@@ -141,7 +159,6 @@ def parse_podspec(podname,podspec_filepath):
         source_dir = download_source(podname, source)
         if source_dir is None:
             return
-        print(source_dir)
 
         check_files(podname, source_dir, podspec)
 
@@ -166,14 +183,10 @@ def build_pod(podname, podpath):
         return
 
     versionpath = os.path.join(podpath, latest_version)
-    # print(podname)
-    # print(versionpath)
 
     podspec_jsonpath = os.path.join(versionpath, podname + '.podspec.json')
-    # print(podspec_jsonpath)
 
     parse_podspec(podname, podspec_jsonpath)
-
 
 
 def build(spec_base):
@@ -182,7 +195,7 @@ def build(spec_base):
     cnt = 0
     for podname in pods:
         cnt += 1
-        if cnt > 1000:
+        if cnt > 10:
             break
 
         # filter some podname
