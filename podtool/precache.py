@@ -4,6 +4,7 @@ import os
 from distutils.version import LooseVersion
 import json
 import glob
+import re
 
 
 download_cache_directory = '/Users/everettjf/cache_supotato'
@@ -38,6 +39,9 @@ def download_git(podname, git, tag=None, commit=None):
 
     if os.path.exists(path):
         return path
+
+    print(git)
+    git = git.replace('https://github.com/', 'git@github.com:',1)
 
     cmd = Command()
     cmd.add('cd ' + download_cache_directory)
@@ -98,6 +102,30 @@ def download_source(podname, source):
     return source_dir
 
 
+def parse_headers(podname, source_dir, pattern):
+    # replace .{h,m} pattern to .h pattern
+    # because python glob can not support ruby pathname style glob
+    pattern = re.sub(r'\.\{\S+\}', '.h',pattern)
+
+    files = glob.glob(os.path.join(source_dir, pattern))
+
+    if len(files) == 0:
+        return
+
+    for filepath in files:
+        filename = os.path.split(filepath)[-1]
+        fileext = os.path.splitext(filename)[1]
+
+        if fileext != '.h':
+            continue
+
+        print('--------------')
+        print(podname)
+        print(filename)
+
+
+
+
 def check_files(podname, source_dir, podspec , sub=False):
     source_files = None
     if 'source_files' in podspec:
@@ -112,27 +140,32 @@ def check_files(podname, source_dir, podspec , sub=False):
         return
 
     if source_files is not None:
-        print('-----------')
-        print(source_dir)
-        print(source_files)
-        print(type(source_files))
-        print(': after glob =')
+        # print('-----------')
+        # print(source_dir)
+        # print(source_files)
+        # print(type(source_files))
+        # print(': after glob =')
 
         if isinstance(source_files, list):
             for source_file in source_files:
-                files = glob.glob(os.path.join(source_dir, source_file))
-                print(files)
+                parse_headers(podname, source_dir, source_file)
         elif isinstance(source_files, str):
             source_file = source_files
-            files = glob.glob(os.path.join(source_dir, source_file))
-            print(files)
+            parse_headers(podname, source_dir, source_file)
         else:
             print(source_files)
             pass
 
     if public_header_files is not None:
-        # print(public_header_files)
-        pass
+        if isinstance(public_header_files, list):
+            for pattern in public_header_files:
+                parse_headers(podname, source_dir, pattern)
+        elif isinstance(public_header_files, str):
+            pattern = public_header_files
+            parse_headers(podname, source_dir, pattern)
+        else:
+            print(public_header_files)
+            pass
 
 
 
@@ -149,7 +182,7 @@ def parse_podspec(podname,podspec_filepath):
     :param podspec_filepath:
     :return:
     """
-    with open(podspec_filepath) as json_file:
+    with open(podspec_filepath,encoding='utf-8') as json_file:
         podspec = json.load(json_file)
 
         source = podspec['source']
