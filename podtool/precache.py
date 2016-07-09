@@ -42,6 +42,7 @@ def download_git(podname, git, tag=None, commit=None):
 
     print(git)
     git = git.replace('https://github.com/', 'git@github.com:',1)
+    git = git.replace('http://github.com/', 'git@github.com:',1)
 
     cmd = Command()
     cmd.add('cd ' + download_cache_directory)
@@ -236,7 +237,7 @@ def build(spec_base):
         podname = podname.replace(')', '')
 
         cnt += 1
-        if cnt > 1000:
+        if cnt > 10000:
             break
 
         # filter some podname
