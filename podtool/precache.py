@@ -51,6 +51,8 @@ def download_git_tag_with_http(podname, git, tag):
     # from   https://github.com/everettjf/supotato.git
     # to     https://github.com/everettjf/supotato/archive/1.0.1.zip
 
+    tag = str(tag)
+
     print('|||||| download using git + tag |||||||')
     prefix = os.path.splitext(git)[0]
 
@@ -61,7 +63,7 @@ def download_git_tag_with_http(podname, git, tag):
     cmd.add('cd ' + download_cache_directory)
     cmd.add('wget ' + tag_http + ' -O ' + zip_filename)
 
-    cmd.add('unzip ' + zip_filename)
+    cmd.add('unzip -o -q ' + zip_filename)
     cmd.add('mv ' + podname + '-' + tag + ' ' + podname)
 
     cmd.add('mkdir ' + podname)
