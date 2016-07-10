@@ -47,6 +47,31 @@ class Command:
         os.system(s)
 
 
+def download_git_tag_with_http(podname, git, tag):
+    # from   https://github.com/everettjf/supotato.git
+    # to     https://github.com/everettjf/supotato/archive/1.0.1.zip
+
+    print('|||||| download using git + tag |||||||')
+    prefix = os.path.splitext(git)[0]
+
+    tag_http = os.path.join(prefix, 'archive', tag + '.zip')
+    zip_filename = podname + '.zip'
+
+    cmd = Command()
+    cmd.add('cd ' + download_cache_directory)
+    cmd.add('wget ' + tag_http + ' -O ' + zip_filename)
+
+    cmd.add('unzip ' + zip_filename)
+    cmd.add('mv ' + podname + '-' + tag + ' ' + podname)
+
+    cmd.add('mkdir ' + podname)
+
+    cmd.run()
+
+    path = os.path.join(download_cache_directory, podname)
+    return path
+
+
 def download_git(podname, git, tag=None, commit=None):
     """
         git clone
@@ -65,13 +90,26 @@ def download_git(podname, git, tag=None, commit=None):
     if os.path.exists(path):
         return path
 
-    print(git)
+    # todo : current ignore none github repos
+    if git.find('github.com') == -1:
+        print('not find')
+        print(git)
+        return path
+
+    if git.startswith('https://github.com') and tag is not None:
+        return download_git_tag_with_http(podname,git,tag)
+
+    print('|||||| download using git or git commit |||||||')
+
+    # use ssh to clone
     git = git.replace('https://github.com/', 'git@github.com:',1)
     git = git.replace('http://github.com/', 'git@github.com:',1)
 
     cmd = Command()
     cmd.add('cd ' + download_cache_directory)
     cmd.add('git clone ' + git + ' ' + podname)
+
+    cmd.add('mkdir ' + podname)
 
     cmd.add('cd ' + path)
     if tag is not None:
@@ -145,9 +183,9 @@ def parse_headers(podname, source_dir, pattern):
         if fileext != '.h':
             continue
 
-        print('--------------')
-        print(podname)
-        print(filename)
+        # print('--------------')
+        # print(podname)
+        # print(filename)
 
 
 
@@ -190,7 +228,7 @@ def check_files(podname, source_dir, podspec , sub=False):
             pattern = public_header_files
             parse_headers(podname, source_dir, pattern)
         else:
-            print(public_header_files)
+            # print(public_header_files)
             pass
 
 
@@ -232,7 +270,6 @@ def fetch_latest_version(podpath):
         if len(versions) == 0:
             return None
 
-        print(versions)
         loose_versions = [LooseVersion(str(ver)) for ver in versions]
         return str(max(loose_versions))
     except:
@@ -262,8 +299,8 @@ def build(spec_base):
         podname = podname.replace(')', '')
 
         cnt += 1
-        if cnt > 10000:
-            break
+        # if cnt > 10000:
+        #     break
 
         if cnt % 100 == 0:
             clear_cache_directory()
