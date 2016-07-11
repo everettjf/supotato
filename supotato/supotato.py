@@ -202,6 +202,7 @@ def check_cocoapods_db():
     url = "https://everettjf.github.io/app/supotato/supotato.db"
 
     print('CocoaPods Index Database not exist , will download from ' + url)
+    print('Please wait for a moment (about 5 MB file will be downloaded)')
 
     # Download the file from `url` and save it locally under `file_name`:
     with urllib.request.urlopen(url) as response, open(dbpath, 'wb') as out_file:
@@ -209,6 +210,30 @@ def check_cocoapods_db():
         out_file.write(data)
 
     print('Download completed')
+
+
+def force_update_db():
+    dbdir = '/var/tmp/supotato'
+    dbpath = '/var/tmp/supotato/supotato.db'
+    if os.path.exists(dbpath):
+        os.remove(dbpath)
+
+    if not os.path.exists(dbdir):
+        os.mkdir(dbdir)
+
+    import urllib.request
+    url = "https://everettjf.github.io/app/supotato/supotato.db"
+
+    print('CocoaPods Index Database not exist , will download from ' + url)
+    print('Please wait for a moment (about 5 MB file will be downloaded)')
+
+    # Download the file from `url` and save it locally under `file_name`:
+    with urllib.request.urlopen(url) as response, open(dbpath, 'wb') as out_file:
+        data = response.read() # a `bytes` object
+        out_file.write(data)
+
+    print('Download completed')
+    print('Update succeed')
 
 
 def main():
@@ -220,7 +245,7 @@ def main():
     parser.add_argument("-s", "--sortby", type=str, help="prefix or count . Means sort by prefix or count.")
     parser.add_argument("-d", "--order", type=str, help="desc or asc.")
     parser.add_argument("-p", "--prefixlength", type=int, help="prefix length for classify , default to 2.")
-    parser.add_argument("-u", "--updatedb", type=int, help="force update cocoapods database.")
+    parser.add_argument("-u", "--updatedb", help="force update cocoapods database.")
 
     args = parser.parse_args()
 
@@ -229,6 +254,11 @@ def main():
     sortby = _get_param(args.sortby, "prefix")
     is_asc = _get_param(args.order, "asc") == "asc"
     prefixlength = int(_get_param(args.prefixlength, "2"))
+
+    forceupdate = args.updatedb
+    if forceupdate is not None:
+        force_update_db()
+        sys.exit()
 
     check_cocoapods_db()
 
