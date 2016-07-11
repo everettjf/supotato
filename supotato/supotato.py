@@ -129,6 +129,13 @@ def _get_param(value, default):
     return _format_arg(value)
 
 
+def check_cocoapods_db():
+    dbpath = '/var/tmp/supotato/supotato.db'
+    if os.path.exists(dbpath):
+        return
+
+
+
 def main():
     description = "Generate a simple report for header files in your directory"
     parser = argparse.ArgumentParser(description=description)
@@ -138,6 +145,7 @@ def main():
     parser.add_argument("-s", "--sortby", type=str, help="prefix or count . Means sort by prefix or count.")
     parser.add_argument("-d", "--order", type=str, help="desc or asc.")
     parser.add_argument("-p", "--prefixlength", type=int, help="prefix length for classify , default to 2.")
+    parser.add_argument("-u", "--updatedb", type=int, help="force update cocoapods database.")
 
     args = parser.parse_args()
 
@@ -146,6 +154,8 @@ def main():
     sortby = _get_param(args.sortby, "prefix")
     is_asc = _get_param(args.order, "asc") == "asc"
     prefixlength = int(_get_param(args.prefixlength, "2"))
+
+    check_cocoapods_db()
 
     classify(input, output, sortby=sortby, asc=is_asc, prefix_length=prefixlength)
 

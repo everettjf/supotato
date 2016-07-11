@@ -204,7 +204,7 @@ def build(spec_base):
 
 if __name__ == '__main__':
 
-    conn = sqlite3.connect('/Users/everettjf/GitHub/supotato/db/supotato.db')
+    conn = sqlite3.connect('/Users/everettjf/GitHub/everettjf.github.io/app/supotato/supotato.db')
     # db_init_table()
 
     spec_base = '/Users/everettjf/Downloads/Specs-master/Specs'
@@ -213,7 +213,10 @@ if __name__ == '__main__':
 
     # fix manually
     db_add_header('RACSignal.h', 'ReactiveCocoa')
+    db_add_pod('ReactiveCocoa', '', '')
+
     db_add_header('PLCrashReporter.h', 'PLCrashReporter')
+    db_add_pod('PLCrashReporter', ' ', '')
 
     conn.commit()
 
