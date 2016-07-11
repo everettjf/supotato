@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sqlite3
+import os
 
 
 class Check:
@@ -23,8 +24,23 @@ def test():
     c = Check()
     c.load()
 
-    print('check %s' % c.check('AFNetworking.h'))
-    print('check %s' % c.check('EVTLayout.h'))
+    pods = {}
+    input = '/Users/everettjf/z/f/headers/'
+    for root, dirs, files in os.walk(input):
+        for f in files:
+            if not f.endswith('.h'):
+                continue
+
+            path = os.path.join(root, f)
+            filename = os.path.relpath(path, input)
+
+            podname = c.check(filename)
+            if podname is not None:
+                pods[podname] = 1
+
+    for pod in pods:
+        print(pod)
+
 
 if __name__ == '__main__':
     test()
