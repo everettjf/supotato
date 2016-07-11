@@ -82,6 +82,8 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
     if sortby == "count":
         sortindex = 1
 
+    print('Start analyzing directory:' + input)
+
     cocoapods = {}
     podsdummys = []
     mapper = {}
@@ -197,6 +199,8 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
                         line = file
                     f.write("    " + line + "\n")
             f.write("--- Total %d files ---"% total_file_count)
+
+    print('Finish analyzing directory:' + input)
 
 
 def _get_param(value, default):
