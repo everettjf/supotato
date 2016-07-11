@@ -19,12 +19,12 @@ class Check:
         return None
 
 
-
 def test():
     c = Check()
     c.load()
 
     print('check %s' % c.check('AFNetworking.h'))
+    print('check %s' % c.check('EVTLayout.h'))
 
 if __name__ == '__main__':
     test()

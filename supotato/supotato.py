@@ -48,6 +48,7 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
     if sortby == "count":
         sortindex = 1
 
+    podsdummys = []
     mapper = {}
     for root, dirs, files in os.walk(input):
         for f in files:
@@ -55,14 +56,17 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
                 continue
 
             path = os.path.join(root, f)
-            path = os.path.relpath(path, input)
+            filename = os.path.relpath(path, input)
 
             prefix = f[:prefix_length]
 
             if prefix in mapper:
-                mapper[prefix].append(path)
+                mapper[prefix].append(filename)
             else:
-                mapper[prefix] = [path]
+                mapper[prefix] = [filename]
+
+            if filename.startswith('PodsDummy'):
+                podsdummys.append(filename)
 
     counter = {}
     for prefix in mapper:
@@ -76,6 +80,10 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
 
 
     # console output
+    print('Pods Dummy Files (%d):' % len(podsdummys))
+    for pod in podsdummys:
+        print('    ' + pod)
+
     total_file_count = 0
     for tuple in ordered:
         prefix = tuple[0]
