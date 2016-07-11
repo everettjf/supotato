@@ -3,8 +3,33 @@ import argparse
 import os
 import six
 import sys
-
 from six.moves import getcwd
+import sqlite3
+
+
+# global checker
+checker = None
+
+
+class Check:
+    def __init__(self):
+        dbpath = '/var/tmp/supotato/supotato.db'
+        if os.path.exists(dbpath):
+            self.conn = sqlite3.connect(dbpath)
+        self.mapper = {}
+
+    def load(self):
+        if self.conn is None:
+            return
+
+        cursor = self.conn.execute('select filename,podname from filemap')
+        for row in cursor:
+            self.mapper[row[0]] = row[1]
+
+    def check(self, filename):
+        if filename in self.mapper:
+            return self.mapper[filename]
+        return None
 
 
 def moveto(file, from_folder, to_folder):
@@ -48,8 +73,10 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
     if sortby == "count":
         sortindex = 1
 
+    cocoapods = {}
     podsdummys = []
     mapper = {}
+
     for root, dirs, files in os.walk(input):
         for f in files:
             if not f.endswith('.h'):
@@ -60,13 +87,20 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
 
             prefix = f[:prefix_length]
 
+            # mapper
             if prefix in mapper:
                 mapper[prefix].append(filename)
             else:
                 mapper[prefix] = [filename]
 
+            # pod dummy
             if filename.startswith('PodsDummy'):
                 podsdummys.append(filename)
+
+            # cocoapods
+            podname = checker.check(filename)
+            if podname is not None:
+                cocoapods[podname] = 1
 
     counter = {}
     for prefix in mapper:
@@ -78,12 +112,20 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
     else:
         ordered = sorted(counter.items(), key=lambda d:d[sortindex], reverse=not asc)
 
+    # console output ######################################
+    # - cocoa pods
+    if len(cocoapods.keys()) > 0:
+        print('CocoaPods (%d) : ' % len(cocoapods.keys()))
+        for pod in cocoapods:
+            print('    ' + pod)
 
-    # console output
-    print('Pods Dummy Files (%d):' % len(podsdummys))
+    # - pods dummy
+    if len(podsdummys) > 0:
+        print('Pods Dummy Files (%d):' % len(podsdummys))
     for pod in podsdummys:
         print('    ' + pod)
 
+    # - file mapper
     total_file_count = 0
     for tuple in ordered:
         prefix = tuple[0]
@@ -96,9 +138,13 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
         for file in files:
             print("    " + file)
 
-    print("--- Total %d files ---"% total_file_count)
+    if total_file_count == 0:
+        print('No header (.h) files found , please specify target directory with -i option.')
+        print('Or try --help for more options.')
+    else:
+        print("--- Total %d files ---"% total_file_count)
 
-    # file output
+    # file output ########################################
     if output is not None:
         if os.path.isdir(output):
             output = os.path.join(output, "result.txt")
@@ -108,6 +154,20 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
             return
 
         with open(output,mode='a+') as f:
+            # - CocoaPods
+            if len(cocoapods.keys()) > 0:
+                f.write('CocoaPods (%d) : \n' % len(cocoapods.keys()))
+                for pod in cocoapods:
+                    f.write('    ' + pod + '\n')
+
+            # - pods dummy
+            if len(podsdummys) > 0:
+                f.write('Pods Dummy Files (%d):\n' % len(podsdummys))
+            for pod in podsdummys:
+                f.write('    ' + pod + '\n')
+
+            f.write('\n')
+
             for tuple in ordered:
                 prefix = tuple[0]
                 files = mapper[prefix]
@@ -130,10 +190,25 @@ def _get_param(value, default):
 
 
 def check_cocoapods_db():
+    dbdir = '/var/tmp/supotato'
     dbpath = '/var/tmp/supotato/supotato.db'
     if os.path.exists(dbpath):
         return
 
+    if not os.path.exists(dbdir):
+        os.mkdir(dbdir)
+
+    import urllib.request
+    url = "https://everettjf.github.io/app/supotato/supotato.db"
+
+    print('CocoaPods Index Database not exist , will download from ' + url)
+
+    # Download the file from `url` and save it locally under `file_name`:
+    with urllib.request.urlopen(url) as response, open(dbpath, 'wb') as out_file:
+        data = response.read() # a `bytes` object
+        out_file.write(data)
+
+    print('Download completed')
 
 
 def main():
@@ -149,13 +224,17 @@ def main():
 
     args = parser.parse_args()
 
-    output = _get_param(args.output, getcwd())
+    output = _get_param(args.output, None)
     input = _get_param(args.input, getcwd())
     sortby = _get_param(args.sortby, "prefix")
     is_asc = _get_param(args.order, "asc") == "asc"
     prefixlength = int(_get_param(args.prefixlength, "2"))
 
     check_cocoapods_db()
+
+    global checker
+    checker = Check()
+    checker.load()
 
     classify(input, output, sortby=sortby, asc=is_asc, prefix_length=prefixlength)
 
