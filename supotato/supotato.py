@@ -31,6 +31,15 @@ class Check:
             return self.mapper[filename]
         return None
 
+    def fetch_cocoapods_link_and_info(self, podname):
+        if self.conn is None:
+            return '',''
+
+        cursor = self.conn.execute("select podname,podlink,podinfo from cocoapods where podname = '" + podname + "'")
+        for row in cursor:
+            return row[1],row[2]
+        return '',''
+
 
 def moveto(file, from_folder, to_folder):
     from_file = os.path.join(from_folder, file)
@@ -119,6 +128,10 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
         for pod in cocoapods:
             print('    ' + pod)
 
+            link, info = checker.fetch_cocoapods_link_and_info(pod)
+            print('        ' + link)
+            print('        ' + info)
+
     # - pods dummy
     if len(podsdummys) > 0:
         print('Pods Dummy Files (%d):' % len(podsdummys))
@@ -159,6 +172,9 @@ def classify(input=None, output=None, sortby="prefix", asc=True, prefix_length=2
                 f.write('CocoaPods (%d) : \n' % len(cocoapods.keys()))
                 for pod in cocoapods:
                     f.write('    ' + pod + '\n')
+                    link, info = checker.fetch_cocoapods_link_and_info(pod)
+                    f.write('        ' + link + '\n')
+                    f.write('        ' + info + '\n')
 
             # - pods dummy
             if len(podsdummys) > 0:
