@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+"""
+1. download all the repo
+2. remove all files except .h and .m
+"""
 
 import os
 from distutils.version import LooseVersion
