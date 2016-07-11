@@ -9,16 +9,40 @@ from distutils.version import LooseVersion
 import json
 import glob
 import re
+import sqlite3
 
 
 download_cache_directory = '/Users/everettjf/cache_supotato'
+
+conn = None
+
+
+def db_init_table():
+    conn.execute('''
+    create table cocoapods
+    (
+    podname char(50) primary key not null,
+    podlink text,
+    podinfo text
+    );
+    ''')
+
+    conn.execute('''
+    create table filemap
+    (
+    filename char(100) primary key not null,
+    podname char(50) not null
+    );
+    ''')
 
 
 def db_add_header(filename, podname):
     print('--------------')
     print(podname)
     print(filename)
-    pass
+
+    conn.execute("replace into filemap values(?,?)",
+                 (filename, podname))
 
 
 def db_add_pod(podname, podlink, podinfo):
@@ -26,7 +50,8 @@ def db_add_pod(podname, podlink, podinfo):
     print(podname)
     print(podlink)
     print(podinfo)
-    pass
+    conn.execute("replace into cocoapods values(?,?,?)",
+                 (podname, podlink, podinfo))
 
 
 
@@ -179,6 +204,12 @@ def build(spec_base):
 
 if __name__ == '__main__':
 
+    conn = sqlite3.connect('/Users/everettjf/supotato.db')
+    # db_init_table()
+
     spec_base = '/Users/everettjf/Downloads/Specs-master/Specs'
+
     build(spec_base)
+
+    conn.commit()
 
