@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
         name="supotato",
-        version="2.0.2",
+        version="2.0.3",
         description="Classify the header (.h) files in to a txt report.",
         url="http://github.com/everettjf/supotato",
         author="everettjf",
