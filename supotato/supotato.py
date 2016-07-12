@@ -209,6 +209,17 @@ def _get_param(value, default):
     return _format_arg(value)
 
 
+def download_file(url,localpath):
+    if six.PY2:
+        import urllib
+        urllib.urlretrieve(url, localpath)
+    else:
+        import urllib.request
+        with urllib.request.urlopen(url) as response, open(localpath, 'wb') as out_file:
+            data = response.read() # a `bytes` object
+            out_file.write(data)
+
+
 def check_cocoapods_db():
     dbdir = '/var/tmp/supotato'
     dbpath = '/var/tmp/supotato/supotato.db'
@@ -218,16 +229,12 @@ def check_cocoapods_db():
     if not os.path.exists(dbdir):
         os.mkdir(dbdir)
 
-    import urllib.request
     url = "https://everettjf.github.io/app/supotato/supotato.db"
 
     print('CocoaPods Index Database not exist , will download from ' + url)
     print('Please wait for a moment (about 5 MB file will be downloaded)')
 
-    # Download the file from `url` and save it locally under `file_name`:
-    with urllib.request.urlopen(url) as response, open(dbpath, 'wb') as out_file:
-        data = response.read() # a `bytes` object
-        out_file.write(data)
+    download_file(url, dbpath)
 
     print('Download completed')
 
