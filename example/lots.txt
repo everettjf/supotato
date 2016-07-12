@@ -1,3 +1,143 @@
+CocoaPods (33) : 
+    UXKit
+        https://github.com/rpplusplus/UXKit
+        A Pod Repo Wrapper the private framework UXKit
+    RYUtils
+        https://github.com/sudotamm/RYUtils
+        Ryan Yuan's private library for Objective-C.
+    QRCodeEncoder
+        https://github.com/lightforce/QRCodeEncoder
+        QRCode encoder for OS X
+    libextobjc
+        https://github.com/jspahrsummers/libextobjc
+        A Cocoa library to extend the Objective-C programming language.
+    GPUImage
+        https://github.com/BradLarson/GPUImage
+        An open source iOS framework for GPU-based image and video processing.
+    PLCrashReporter
+        https://www.plcrashreporter.org/
+        Reliable, open-source crash reporting for iOS and Mac OS X.
+    AliyunOSSiOS
+        https://github.com/aliyun/AliyunOSSiOS
+        An iOS SDK for Aliyun Object Storage Service
+    ZZWeChat
+        https://open.weixin.qq.com/
+        WeChatSDK for Cocoapods convenience.
+    TRWebImage
+        http://lijinchao.sinaapp.com
+        just like SBWebImage except the cache
+    AliBaichuan
+        https://github.com/myz1104/AliBaichuan
+        阿里百川IM
+    UIAutomation
+        http://github.com/joemasilotti/UIAutomation
+        iOS's private UIAutomation framework headers.
+    ABTest
+        https://github.com/chrismaddern/iOS-Split-A-B-Test-Library
+        A framework to quickly add remotely controlled and monitored A/B Tests to your application
+    FBAllocationTracker
+        https://github.com/facebook/FBAllocationTracker
+        Interface for tracking allocations and generations of objects
+    FBPLUGIN
+        https://github.com/tthufo
+        Plugin for Facebook intergration
+    FBMemoryProfiler
+        https://github.com/facebook/FBMemoryProfiler
+        iOS tool that helps with profiling iOS Memory usage
+    DTKit
+        http://blog.csdn.net/wjpaaa
+        My DTKit.
+    WHCNetWorkKit
+        https://github.com/netyouli/WHCNetWorkKit
+        WHCNetWorkKit 是http网络请求开源库(支持GET/POST 文件上传 后台文件下载 UIButton UIImageView 控件设置网络图片 网络数据工具json/xml 转模型类对象 网络状态监听)
+    authorizenet-sdk
+        https://github.com/authorizenet/sdk-ios
+        iOS SDK for Authorize.Net Payments
+    Airbrake-iOS
+        https://airbrake.io/languages/ios_bug_tracker
+        An Airbrake Notifier for iOS
+    TDforkZipArchive
+        https://github.com/mattconnolly/ZipArchive
+        An Objective C class for zip/unzip on iPhone and Mac OS X.
+    MSWeakTimer
+        https://github.com/mindsnacks/MSWeakTimer
+        Thread-safe NSTimer alternative that doesn't retain the target and supports being used with GCD queues.
+    SimpleObjectPool
+        https://github.com/paulmelnikow/SimpleObjectPool
+        Simple thread-safe object pool in Objective-C
+    hccoren
+        https://github.com/halfking/hccoren
+        这是一个与具体业务无关的通用核心库。
+    KLSwitch
+        http://www.cocoacontrols.com/platforms/ios/controls/klswitch
+        An iOS 7 UISwitch clone that works on iOS 5+.
+    XMNThirdFunction
+        https://github.com/ws00801526
+        封装第三方SDK 集成分享功能
+    MJRefresh
+        https://github.com/CoderMJLee/MJRefresh
+        An easy way to use pull-to-refresh
+    ReactiveCocoa
+        https://github.com/ReactiveCocoa/ReactiveCocoa
+        A framework for composing and transforming streams of values.
+    HTY360Player
+        https://github.com/islate/HTY360Player
+        全景视频播放
+    FBRetainCycleDetector
+        https://github.com/facebook/FBRetainCycleDetector
+        Library that helps with detecting retain cycles in iOS apps
+    FMDB
+        https://github.com/ccgus/fmdb
+        A Cocoa / Objective-C wrapper around SQLite.
+    CXAlertView
+        https://github.com/ChrisXu1221/CXAlertView
+        Custom alert-view which allow you to add view as main content.
+    XIAOJIANGJIANG
+        https://github.com/mrjlovetian/XIAOJIANGJIANG
+        修改的版本信息
+    ZCCale
+        https://github.com/zuo305/ZCCale
+        customizable date range picker
+Pods Dummy Files (38):
+    PodsDummy_ACRichTextView.h
+    PodsDummy_AliyunOSSiOS.h
+    PodsDummy_Aspects.h
+    PodsDummy_FBAllocationTracker.h
+    PodsDummy_FBMemoryProfiler.h
+    PodsDummy_FBRetainCycleDetector.h
+    PodsDummy_FMDB.h
+    PodsDummy_FMHorListView.h
+    PodsDummy_GPUImage.h
+    PodsDummy_IFKeyboardKit.h
+    PodsDummy_iOS_Util_AMR.h
+    PodsDummy_iOS_Util_Bean.h
+    PodsDummy_iOS_Util_Cache.h
+    PodsDummy_iOS_Util_Common.h
+    PodsDummy_iOS_Util_Core.h
+    PodsDummy_iOS_Util_DB.h
+    PodsDummy_iOS_Util_Foundation.h
+    PodsDummy_iOS_Util_Json.h
+    PodsDummy_iOS_Util_Location.h
+    PodsDummy_iOS_Util_Preference.h
+    PodsDummy_iOS_Util_WebP.h
+    PodsDummy_libextobjc.h
+    PodsDummy_libwebp.h
+    PodsDummy_Masonry.h
+    PodsDummy_MBMvc.h
+    PodsDummy_MBProgressHUD.h
+    PodsDummy_MGSwipeTableCell.h
+    PodsDummy_MJRefresh.h
+    PodsDummy_Pods_FleaMarket.h
+    PodsDummy_Pods_Template4ThirdParty_RegexKitLite.h
+    PodsDummy_pop.h
+    PodsDummy_PureLayout.h
+    PodsDummy_Reachability.h
+    PodsDummy_ReactiveCocoa.h
+    PodsDummy_ShareSDK.h
+    PodsDummy_TaobaoRemoteObject.h
+    PodsDummy_TBBlocksKit.h
+    PodsDummy_ZipArchive.h
+
 AB  (7)
     ABPeoplePickerNavigationControllerDelegate-Protocol.h
     ABTestButton.h
