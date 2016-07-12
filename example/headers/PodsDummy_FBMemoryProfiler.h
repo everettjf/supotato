@@ -6,9 +6,9 @@
 
 #import "NSObject.h"
 
-@class TBAccsRequest;
+@interface PodsDummy_FBMemoryProfiler : NSObject
+{
+}
 
-@protocol AccsRequestSender <NSObject>
-- (void)sendRequest:(TBAccsRequest *)arg1;
 @end
 

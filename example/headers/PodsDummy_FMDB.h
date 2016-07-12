@@ -6,9 +6,9 @@
 
 #import "NSObject.h"
 
-@class TBAccsRequest;
+@interface PodsDummy_FMDB : NSObject
+{
+}
 
-@protocol AccsRequestManager <NSObject>
-- (void)startRequest:(TBAccsRequest *)arg1;
 @end
 
