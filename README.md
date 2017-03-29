@@ -7,7 +7,7 @@ Classify (.h) header files into a text (.txt) report according to the first 2 le
 ```sh
 $ pip install supotato
 ```
-#### Compatibility
+## Compatibility
 
 Tested 2.7.10/3.5.0 on macOS
 
@@ -38,7 +38,7 @@ Then you got result below :
 PS: Another result sample [Here](https://github.com/everettjf/supotato/blob/master/example/lots.txt).
 
 
-##Options
+## Options
 
 ```
 $ supotato -h
