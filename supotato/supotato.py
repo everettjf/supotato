@@ -5,7 +5,8 @@ import six
 import sys
 from six.moves import getcwd
 import sqlite3
-
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 # global checker
 checker = None
